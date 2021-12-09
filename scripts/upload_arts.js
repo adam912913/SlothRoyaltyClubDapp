@@ -17,6 +17,8 @@ let art_dir = process.env.CONFIG_DIR_ARTS;
 let metadata_dir = process.env.CONFIG_DIR_METADATAS;
 let uploaded_art_count = upload_status.upload_success_nft_keys.length;
 
+console.log(pinata_api_key, pinata_api_secret);
+
 upload_art_item = (cur_key) => {
     let art_file_name = art_dir + upload_status.misupload_nft_keys[cur_key] + '.png';
     let art_metadata_file_name = metadata_dir + upload_status.misupload_nft_keys[cur_key] + '.json';
@@ -37,16 +39,12 @@ upload_art_item = (cur_key) => {
     ).then(function (response) {
         //handle response here
         images_hash = response.data.IpfsHash;
-        // console.log(response.data)
         let cur_art_metadata = JSON.parse(fs.readFileSync(art_metadata_file_name));
         cur_art_metadata.image = gateway_url + images_hash;
-
-        // console.log(upload_status.misupload_nft_keys.length)
         upload_status.upload_success_nft_keys.push(upload_status.misupload_nft_keys[cur_key]);
         upload_status.misupload_nft_keys.splice(cur_key, 1);
         uploaded_art_count = upload_status.upload_success_nft_keys.length;
-        // console.log(upload_status.misupload_nft_keys.length)
-        // console.log("image count: ", imageCount);
+
         console.log(art_file_name, art_metadata_file_name);
         console.log(`image url: `, gateway_url + images_hash);
 
