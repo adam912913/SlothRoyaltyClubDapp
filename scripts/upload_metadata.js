@@ -69,4 +69,4 @@ set_tokenURIs = (folder_hash) => {
     fs.writeFileSync(process.env.CONFIG_UPLOAD_METADATA_STATUS_PATH, JSON.stringify(upload_metadata_status, null, '\t'));
 }
 
-set_tokenURIs('QmZrtCmp5oYCKZSmbVB7v1ppKfadXjA2cZcWSAY1YMUeoKQmZrtCmp5oYCKZSmbVB7');
+set_tokenURIs('QmRHbx35rwfPkzNwvRUm1yne3oszsHArJaiFFCQaFRkA8m');
