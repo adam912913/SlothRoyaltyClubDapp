@@ -64,19 +64,20 @@ let mint_status = JSON.parse(fs.readFileSync('./config/mint_status.json'));
 
 async function mint_nfts() {
     let tokenIDs = Object.keys(upload_metadata_status.tokenURIs);
-    console.log(mint_status.cur_minting_tokenID_index)
+    let limit_count = parseInt(process.env.CONFIG_MINT_MAX_COUNT);
     for (let i = mint_status.cur_minting_tokenID_index; i < tokenIDs.length; i++) {
-        if (i >= 50) {
+        if (i >= limit_count) {
             break;
         }
         const token_id = tokenIDs[i];
         const tokenURI = upload_metadata_status.tokenURIs[token_id];
-        // console.log(token_id, tokenURI);
+        console.log(token_id, tokenURI);
 
-        // const result = await nftContract.methods
-        //     .mintTo(OWNER_ADDRESS, tokenURI)
-        //     .send({ from: OWNER_ADDRESS });
-        // console.log("Minted SRC NFTs. Transaction: " + result.transactionHash);
+        const result = await nftContract.methods
+            .mintTo(OWNER_ADDRESS, tokenURI)
+            .send({ from: OWNER_ADDRESS });
+        console.log("Minted SRC NFTs. Transaction: " + result.transactionHash);
+
         console.log("TokenID: " + token_id);
         console.log("TokenURI: " + tokenURI);
 
@@ -89,4 +90,4 @@ async function mint_nfts() {
 
 mint_nfts();
 
-process.exit(0);
+// process.exit(0);
