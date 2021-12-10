@@ -43,7 +43,7 @@ console.log(NETWORK)
 //         type: "function",
 //     },
 // ];
-const contract = require("../artifacts/SlothRoyaltyClub.json");
+const contract = require("../src/artifacts/SlothRoyaltyClub.json");
 const NFT_ABI = contract.abi;
 const network = NETWORK === "mainnet" || NETWORK === "live" ? "mainnet" : "rinkeby";
 const provider = new HDWalletProvider(
