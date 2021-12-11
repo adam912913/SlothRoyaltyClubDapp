@@ -1,13 +1,63 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #101010;
+  color: #ffffff;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.mint_wrapper {
+  background: url(./assets/images/homepage.png) no-repeat;
+  width: 100%;
+  height: 55vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer_wrapper {
+  background: url(./assets/images/footer-bg.png) no-repeat;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+}
+.latest_nfts_wrapper {
+  background: url(./assets/images/latest-nfts-bg.png) no-repeat;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.latest_nfts_carousel .slider_item_image {
+  width: 98%;
+}
+.latest_nfts_carousel .slider_item a {
+  text-decoration: none;
+}
+.latest_nfts_carousel .slider_item a h3 {
+  font-size: 14px;
+  color: #fbfbfb;
+  padding: 12px;
+  font-size: 12px;
+  letter-spacing: 0.1px;
+  font-weight: 600;
+}
+.title_banner {
+  width: 500px;
+}
+
+@media screen and (max-width: 600px) {
+  .title_banner {
+    width: 80%;
+  }
 }

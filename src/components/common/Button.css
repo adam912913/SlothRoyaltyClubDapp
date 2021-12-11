@@ -1,0 +1,19 @@
+.btn {
+  padding: 18px 48px;
+  transition: all 0.5s ease;
+  box-shadow: 0px 0px 8px 0px #000000;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-primary {
+  background-image: linear-gradient(127deg, #001aff -19%, #e70000 110%);
+  color: #ffffff;
+}
+
+.btn-white {
+  background-color: #ffffff;
+  color: #000000;
+}
