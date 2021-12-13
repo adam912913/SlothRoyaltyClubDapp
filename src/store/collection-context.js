@@ -6,13 +6,15 @@ const CollectionContext = React.createContext({
     collection: [],
     nftIsLoading: true,
     processMinting: false,
+    minted_count: 0,
     loadContract: () => { },
     loadTotalSupply: () => { },
     loadCollection: () => { },
     updateTotalSupply: () => { },
     updateCollection: () => { },
-    // updateOwner: () => { },
     setNftIsLoading: () => { },
+    setMintedCount: () => { },
+    IncreaseMintedCount: () => { },
     setprocessMinting: () => { }
 });
 

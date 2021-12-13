@@ -11,7 +11,7 @@ const Footer = () => {
                             <div className="col-lg-12 justify-content text-center pt-4 pb-4">
                                 <Button
                                     className='btn-primary'
-                                    routeURL='https://testnets.opensea.io/collection/slothroyaltyclub-qt7jh7ycwf'
+                                    routeURL={process.env.REACT_APP_OPENSEA_URL}
                                     title='View Opensea'
                                 />
                             </div>

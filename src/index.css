@@ -23,8 +23,13 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
-
+.minting_spinner {
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 17px);
+}
 .footer_wrapper {
   background: url(./assets/images/footer-bg.png) no-repeat;
   width: 100%;

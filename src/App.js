@@ -38,18 +38,25 @@ const App = () => {
             // Load Contracts      
             const nftDeployedNetwork = NFTCollection.networks[networkId];
             const nftContract = collectionCtx.loadContract(web3, NFTCollection, nftDeployedNetwork);
-            console.log(nftContract)
+            // console.log(nftContract)
 
             if (nftContract) {
                 // Load total Supply
                 const totalSupply = await collectionCtx.loadTotalSupply(nftContract);
-                console.log(totalSupply)
+                collectionCtx.setMintedCount(parseInt(totalSupply));
+
+                // Load Collection
+                collectionCtx.loadCollection(nftContract, totalSupply);
+                collectionCtx.setNftIsLoading(false)
+
                 // Event subscription
                 nftContract.events.Transfer()
                     .on('data', (event) => {
                         console.log("block updated !");
                         console.log(event);
-                        collectionCtx.loadTotalSupply(nftContract);
+                        collectionCtx.IncreaseMintedCount()
+                        console.log(collectionCtx.minted_count);
+                        // collectionCtx.loadTotalSupply(nftContract);
                         // collectionCtx.updateCollection(nftContract, event.returnValues.tokenId, event.returnValues.to);
                         // collectionCtx.setNftIsLoading(false);
                     })
@@ -65,6 +72,7 @@ const App = () => {
                 set_is_valid_account(true);
             }
 
+            console.log(collectionCtx)
 
             // Metamask Event Subscription - Account changed
             window.ethereum.on('accountsChanged', (accounts) => {

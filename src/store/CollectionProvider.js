@@ -8,6 +8,7 @@ const defaultCollectionState = {
     collection: [],
     nftIsLoading: true,
     processMinting: false,
+    minted_count: 0,
 };
 
 const collectionReducer = (state, action) => {
@@ -17,7 +18,8 @@ const collectionReducer = (state, action) => {
             totalSupply: state.totalSupply,
             collection: state.collection,
             nftIsLoading: state.nftIsLoading,
-            processMinting: state.processMinting
+            minted_count: state.minted_count,
+            processMinting: state.processMinting,
         };
     }
 
@@ -27,6 +29,7 @@ const collectionReducer = (state, action) => {
             totalSupply: action.totalSupply,
             collection: state.collection,
             nftIsLoading: state.nftIsLoading,
+            minted_count: state.minted_count,
             processMinting: state.processMinting
         };
     }
@@ -37,8 +40,12 @@ const collectionReducer = (state, action) => {
             totalSupply: state.totalSupply,
             collection: action.collection,
             nftIsLoading: state.nftIsLoading,
+            minted_count: state.minted_count,
             processMinting: state.processMinting
         };
+        // return {
+        //     collection: action.collection, ...state
+        // };
     }
 
     if (action.type === 'UPDATECOLLECTION') {
@@ -56,6 +63,7 @@ const collectionReducer = (state, action) => {
             totalSupply: state.totalSupply,
             collection: collection,
             nftIsLoading: state.nftIsLoading,
+            minted_count: state.minted_count,
             processMinting: state.processMinting,
         };
     }
@@ -66,17 +74,42 @@ const collectionReducer = (state, action) => {
             totalSupply: state.totalSupply,
             collection: state.collection,
             processMinting: state.processMinting,
+            minted_count: state.minted_count,
             nftIsLoading: action.loading,
         };
     }
 
     if (action.type === 'MINTING') {
+        console.log(action)
         return {
             contract: state.contract,
             totalSupply: state.totalSupply,
             collection: state.collection,
             nftIsLoading: state.nftIsLoading,
-            processMinting: action.minting,
+            minted_count: state.minted_count,
+            processMinting: action.processMinting,
+        };
+    }
+
+    if (action.type === 'SET_MINTED_COUNT') {
+        return {
+            contract: state.contract,
+            totalSupply: state.totalSupply,
+            collection: state.collection,
+            nftIsLoading: state.nftIsLoading,
+            processMinting: state.minting,
+            minted_count: action.minted_count,
+        };
+    }
+
+    if (action.type === 'INCREASE_MINTED_COUNT') {
+        return {
+            contract: state.contract,
+            totalSupply: state.totalSupply,
+            collection: state.collection,
+            nftIsLoading: state.nftIsLoading,
+            minted_count: state.minted_count + 1,
+            processMinting: state.minting,
         };
     }
 
@@ -100,24 +133,30 @@ const CollectionProvider = props => {
 
     const loadCollectionHandler = async (contract, totalSupply) => {
         let collection = [];
-
-        for (let i = 0; i < totalSupply; i++) {
-            const hash = await contract.methods.tokenURIs(i).call();
+        
+        for (let i = totalSupply; i > totalSupply - 7; i--) {
+            const tokenURI = await contract.methods.tokenURI(i).call();
             try {
-                const response = await fetch(`https://ipfs.infura.io/ipfs/${hash}?clear`);
+                const response = await fetch(tokenURI);
                 if (!response.ok) {
                     throw new Error('Something went wrong');
                 }
 
                 const metadata = await response.json();
-                const owner = await contract.methods.ownerOf(i + 1).call();
+                console.log(metadata)
+                // const owner = await contract.methods.ownerOf(i + 1).call();
 
-                collection = [{
-                    id: i + 1,
-                    title: metadata.properties.name.description,
-                    img: metadata.properties.image.description,
-                    owner: owner
-                }, ...collection];
+                // collection = [{
+                //     id: i,
+                //     name: metadata.name,
+                //     image: metadata.image,
+                // }, ...collection];
+                collection.push({
+                    id: i,
+                    name: metadata.name,
+                    image: metadata.image,
+                    url: process.env.REACT_APP_OPENSEA_ITEM_URL + process.env.REACT_APP_NFT_CONTRACT_ADDRESS + '/'
+                });
             } catch {
                 console.error('Something went wrong');
             }
@@ -148,16 +187,20 @@ const CollectionProvider = props => {
         dispatchCollectionAction({ type: 'UPDATECOLLECTION', NFT: NFT });
     };
 
-    // const updateOwnerHandler = (id, newOwner) => {
-    //     dispatchCollectionAction({ type: 'UPDATEOWNER', id: id, newOwner: newOwner });
-    // };
-
     const setNftIsLoadingHandler = (loading) => {
         dispatchCollectionAction({ type: 'LOADING', loading: loading });
     };
 
-    const setprocessMintingHandler = (minting) => {
-        dispatchCollectionAction({ type: 'MINTING', minting: minting });
+    const setprocessMintingHandler = (processMinting) => {
+        dispatchCollectionAction({ type: 'MINTING', processMinting: processMinting });
+    };
+
+    const setMintedCountHandler = (minted_count) => {
+        dispatchCollectionAction({ type: 'SET_MINTED_COUNT', minted_count: minted_count });
+    };
+
+    const IncreaseMintedCountHandler = () => {
+        dispatchCollectionAction({ type: 'INCREASE_MINTED_COUNT' });
     };
 
     const collectionContext = {
@@ -166,13 +209,15 @@ const CollectionProvider = props => {
         collection: CollectionState.collection,
         nftIsLoading: CollectionState.nftIsLoading,
         processMinting: CollectionState.processMinting,
+        minted_count: CollectionState.minted_count,
         loadContract: loadContractHandler,
         loadTotalSupply: loadTotalSupplyHandler,
         loadCollection: loadCollectionHandler,
         updateCollection: updateCollectionHandler,
-        // updateOwner: updateOwnerHandler,
         setNftIsLoading: setNftIsLoadingHandler,
-        setprocessMinting: setprocessMintingHandler
+        setMintedCount: setMintedCountHandler,
+        IncreaseMintedCount: IncreaseMintedCountHandler,
+        setprocessMinting: setprocessMintingHandler,
     };
 
     return (
