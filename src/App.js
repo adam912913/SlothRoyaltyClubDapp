@@ -56,7 +56,7 @@ const App = () => {
                         console.log(event);
                         collectionCtx.IncreaseMintedCount()
                         console.log(collectionCtx.minted_count);
-                        // collectionCtx.loadTotalSupply(nftContract);
+                        collectionCtx.loadTotalSupply(nftContract);
                         // collectionCtx.updateCollection(nftContract, event.returnValues.tokenId, event.returnValues.to);
                         // collectionCtx.setNftIsLoading(false);
                     })

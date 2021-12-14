@@ -6,7 +6,7 @@ import CollectionContext from '../store/collection-context';
 import LastNFTs from "./LastNFTs";
 import MitingStatus from "./MitingStatus";
 
-const test_mint_count = -1;
+const test_mint_count = 1000;
 
 const Main = () => {
     const web3Ctx = useContext(Web3Context);
@@ -73,26 +73,32 @@ const Main = () => {
             //     )
             // }
             let mint_count = process.env.REACT_APP_CONFIG_MINT_MAX_COUNT - collectionCtx.totalSupply;
-            if (test_mint_count > 0) {
+            if (test_mint_count > 0 && mint_count > test_mint_count) {
                 mint_count = test_mint_count;
             }
-            collectionCtx.contract.methods
-                .mintToCount(web3Ctx.account, mint_count)
-                .send({ from: web3Ctx.account })
-                .on('transactionHash', (hash) => {
-                    console.log("Minted SRC. Transaction: " + hash);
-                    collectionCtx.setprocessMinting(false);
-                    window.alert('Please check your collection after a few minutes...');
-                })
-                .on('error', (e) => {
-                    window.alert('Something went wrong when pushing to the blockchain');
-                    collectionCtx.setprocessMinting(false);
-                });
+            console.log(process.env.REACT_APP_CONFIG_MINT_MAX_COUNT, collectionCtx.totalSupply);
+            console.log(test_mint_count);
+            if (mint_count <= 0) {
+                window.alert("You can't mint any NFTs...");
+            }
+            else if (collectionCtx.totalSupply != null && window.confirm("Do you really want to mint your " + mint_count + " NFTs?")) {
+                collectionCtx.setprocessMinting(true);
+                collectionCtx.contract.methods
+                    .mintToCount(web3Ctx.account, mint_count)
+                    .send({ from: web3Ctx.account })
+                    .on('transactionHash', (hash) => {
+                        console.log("Minted SRC. Transaction: " + hash);
+                        collectionCtx.setprocessMinting(false);
+                        window.alert('Please check your collection after a few minutes...');
+                        window.location.reload();
+                    })
+                    .on('error', (e) => {
+                        window.alert('Something went wrong when pushing to the blockchain');
+                        collectionCtx.setprocessMinting(false);
+                    });
+            }
         }
-        if (window.confirm("Do you really want to mint your NFTs?")) {
-            collectionCtx.setprocessMinting(true);
-            mintNFT();
-        }
+        mintNFT();
     }
 
     return (
