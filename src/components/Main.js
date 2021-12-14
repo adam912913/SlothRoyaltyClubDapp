@@ -22,6 +22,7 @@ const Main = () => {
             const API_URL = process.env.REACT_APP_ALCHEMY_API_URL
             const PUBLIC_KEY = process.env.REACT_APP_OWNER_ADDRESS
             const PRIVATE_KEY = process.env.REACT_APP_OWNER_PK
+            const MNEMONIC = process.env.REACT_APP_MNEMONIC
             const web3 = createAlchemyWeb3(API_URL)
             const contractAddress = process.env.REACT_APP_NFT_CONTRACT_ADDRESS;
             const nftContract = new web3.eth.Contract(NFTContract.abi, contractAddress)
